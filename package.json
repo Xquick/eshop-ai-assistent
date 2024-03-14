@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc && cp src/index.html dist/index.html"
   },
   "repository": {
     "type": "git",
