@@ -1,0 +1,23 @@
+{
+  "name": "eshop-ai-assistent",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Xquick/eshop-ai-assistent.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Xquick/eshop-ai-assistent/issues"
+  },
+  "homepage": "https://github.com/Xquick/eshop-ai-assistent#readme",
+  "devDependencies": {
+    "@types/node": "^20.11.27",
+    "typescript": "^5.4.2"
+  }
+}
