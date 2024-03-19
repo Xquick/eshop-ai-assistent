@@ -1,18 +1,23 @@
-<template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
-</template>
+<script setup>
+import Container from './components/Container.vue'
+import {useChatStore} from "@/store/chat";
+import {onMounted} from "vue";
 
-<script>
-import HelloWorld from './components/HelloWorld.vue'
+const chatStore = useChatStore();
 
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+onMounted(async () => {
+  await Promise.all([
+    chatStore.subscribeResponse(),
+    chatStore.getChatList(),
+  ]);
+})
 </script>
+
+<template>
+  <div class="app">
+    <Container/>
+  </div>
+</template>
 
 <style>
 #app {
