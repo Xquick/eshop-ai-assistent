@@ -2,9 +2,9 @@
 import {copyToClipboard} from "@/util/clipboard.ts";
 import {toast} from "vue3-toastify";
 import {useI18n} from "vue-i18n";
-import {inject, ref} from "vue";
+import {ref} from "vue";
 
-const {id, content, feedbackOk, status, type} = defineProps<{
+const {id, content, type} = defineProps<{
   id: number,
   content: string,
   feedbackOk: boolean,
@@ -14,13 +14,10 @@ const {id, content, feedbackOk, status, type} = defineProps<{
 
 const {t} = useI18n()
 
-const feedbackModalVisible = ref(false)
 const copyToClipboardHandler = (content) => {
   copyToClipboard(content);
   toast.success(t(`ui.clipboard.success`));
 }
-const chatId = inject('chatId');
-
 </script>
 
 <template>

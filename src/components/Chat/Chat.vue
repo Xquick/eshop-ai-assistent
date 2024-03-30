@@ -1,11 +1,9 @@
 <script setup lang="ts">
 import ChatPromptContainer from "@/components/Chat/ChatPrompt/ChatPromptContainer.vue";
 import ChatContent from "@/components/Chat/ChatContent.vue";
-import {inject} from "vue";
 
-
-const threadId = inject('threadId') as string;
 const { messages } = defineProps<{
+  threadId: string,
   messages: [],
 }>()
 

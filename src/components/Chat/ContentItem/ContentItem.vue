@@ -1,10 +1,7 @@
 <script setup lang="ts">
 import Avatar from "@/components/atoms/Avatar/Avatar.vue";
-import {OpenAIRole, useChatStore} from "@/store/chat.ts";
-import {storeToRefs} from "pinia";
+import {OpenAIRole} from "@/store/chat.ts";
 import TextItem from "@/components/Chat/ContentItem/TextItem.vue";
-import ContentItemActions from "@/components/Chat/ContentItem/ContentItemActions.vue";
-import {inject} from "vue";
 
 const {id, content, role} = defineProps<{
   id: number,

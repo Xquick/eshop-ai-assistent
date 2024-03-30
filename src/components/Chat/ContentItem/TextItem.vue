@@ -1,15 +1,9 @@
 <script setup lang="ts">
 import Spinner from "@/components/atoms/Spinner/Spinner.vue";
-import {storeToRefs} from "pinia";
-import {useChatStore} from "@/store/chat.ts";
-import {inject} from "vue";
 
 const {content} = defineProps<{
   content: string,
 }>();
-const chatId = inject('chatId');
-
-const {generatingInProgress} = storeToRefs(useChatStore());
 
 </script>
 

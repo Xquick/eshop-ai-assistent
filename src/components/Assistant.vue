@@ -7,7 +7,6 @@ import {useGtag} from "vue-gtag-next";
 const input = ref<HTMLInputElement>();
 
 const threadId = ref();
-// () => 'thread_MlW4lwiGwCWZXgZZKNz5siEl'
 
 const messages = ref([]);
 const {event} = useGtag();
@@ -57,14 +56,15 @@ onMounted(async () => {
   });
 })
 
-provide('threadId', threadId);
-
 </script>
 
 <template>
   <div class="assistant">
     <div class="assistant__close" @click="$emit('close')">x</div>
-    <Chat :messages="messages" @prompt-sent="onPromptSent"/>
+    <Chat
+        :thread-id="threadId"
+        :messages="messages"
+        @prompt-sent="onPromptSent"/>
   </div>
 </template>
 
