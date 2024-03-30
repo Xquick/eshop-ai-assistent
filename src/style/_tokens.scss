@@ -1,4 +1,26 @@
 :root {
   --color-primary: #FEB801;
+  --color-primary--hover: #ffc01b;
   --color-border: #CCCCCC;
+}
+
+:root {
+  .btn-primary {
+    --cui-btn-color: rgba(255, 255, 255, 0.87);
+    --cui-btn-bg: var(--color-primary);
+    --cui-btn-border-color: var(--color-primary);
+    --cui-btn-hover-color: rgba(255, 255, 255, 0.87);
+    --cui-btn-hover-bg: var(--color-primary--hover);
+    --cui-btn-hover-border-color: var(--color-primary--hover);
+    --cui-btn-focus-shadow-rgb: 75, 58, 223;
+    --cui-btn-active-color: rgba(255, 255, 255, 0.87);
+    --cui-btn-active-bg: var(--color-primary--hover);
+    --cui-btn-active-border-color: var(--color-primary--hover);
+    --cui-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 21, 0.125);
+    --cui-btn-disabled-color: rgba(255, 255, 255, 0.87);
+    --cui-btn-disabled-bg: var(--color-primary);
+    --cui-btn-disabled-border-color: var(--color-primary);
+
+    background: var(--color-primary) !important;
+  }
 }

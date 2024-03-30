@@ -13,7 +13,7 @@ let isAssistantOpen = ref(false);
 
 <template>
   <div class="assistant-container">
-    <Assistant v-if="isAssistantOpen" @close="isAssistantOpen=false"/>
+    <Assistant class="assistant-container__content" v-if="isAssistantOpen" @close="isAssistantOpen=false"/>
     <TriggerButton v-else @click="handleClick"/>
   </div>
 </template>
@@ -23,7 +23,16 @@ let isAssistantOpen = ref(false);
 <style scoped lang="scss">
 .assistant-container {
   position: fixed;
-  bottom: 30px;
-  right: 30px;
+  bottom: 0;
+  right: 0;
+  max-height: 100vh;
+  padding-bottom: 30px;
+  padding-right: 30px;
+
+  &__content {
+    width: 900px;
+    height: calc(100vh - 100px);
+    max-width: calc(100vw - 100px);
+  }
 }
 </style>

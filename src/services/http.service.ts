@@ -1,14 +1,18 @@
-import {supabase} from "@/supabase.ts";
-import {SUPABASE_PROJECT_URL} from "@/constants/variables.ts";
+import {API_URL} from "@/constants/variables.ts";
 
-export async function postRequest(url, body = {}, options = {}): Promise<Response> {
-    const session = await supabase.auth.getSession();
-    // let accessToken = session?.data?.session?.access_token;
-    let accessToken = `super-secret-jwt-token-with-at-least-32-characters-long`;
+export async function getRequest(url, inputParams = {}, options = {}): Promise<Response> {
+    const params = new URLSearchParams(inputParams);
 
-    return fetch(`${SUPABASE_PROJECT_URL}/functions/v1/${url}`, {
+    return fetch(`${API_URL}/${url}?${params.toString()}`, {
         headers: {
-            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'application/json'
+        },
+        ...options,
+    });
+}
+export async function postRequest(url, body = {}, options = {}): Promise<Response> {
+    return fetch(`${API_URL}/${url}`, {
+        headers: {
             'Content-Type': 'application/json'
         },
         method: "POST",
@@ -17,62 +21,41 @@ export async function postRequest(url, body = {}, options = {}): Promise<Respons
     });
 }
 
-export async function getHttpAIStream({
-                                          messages,
-                                          responseId
-                                      }, callbackOnInit,
-                                      callbackOnIteration,
-                                      callbackOnFinish,
-                                      callbackOnError) {
-    callbackOnInit();
-    const controller = new AbortController();
-    const signal = controller.signal;
+export async function createMessage(threadId,
+                                    message,
+                                    callbackOnIteration,
+                                    callbackOnFinish?,
+                                    callbackOnError?) {
 
-    let response;
-    let done = false;
+    postRequest('message', { thread_id: threadId, message })
+        .then(response => {
+            const reader = response.body.getReader();
 
-    try {
-        response = await postRequest('app', {
-            messages,
-            responseId
-        }, {signal});
+            return reader.read().then(function processText({ done, value }) {
+                if (done) {
+                    console.log('Stream complete');
+                    callbackOnFinish?.()
+                    return;
+                }
 
-        console.log(response);
-        if (!response.ok) {
-            return response;
-        }
-    } catch (e) {
-        console.error(e);
-        return response;
-    }
+                // Convert the Uint8Array to a string and process the chunk
+                let text = new TextDecoder().decode(value);
+                callbackOnIteration(text);
 
-    const data = response.body;
+                // Read the next chunk
+                return reader.read().then(processText);
+            });
+        })
+        .catch(err => {
+            callbackOnError?.(err);
+            console.error('Fetch error:', err);
+        });
+}
 
-    if (!data) {
-        console.error(`No Stream`);
-        return;
-    }
+export async function listMessages(threadId) {
+    return getRequest('thread/list', { thread_id: threadId })
+}
 
-    const reader = data.getReader();
-    const decoder = new TextDecoder();
-    let buffer = [];
-    let foundDelimiter = false;
-    const BUFFER_SIZE = 8;
-
-    while (!done) {
-        const {value, done: doneReading} = await reader.read();
-        done = doneReading;
-        const chunkValue = decoder.decode(value);
-
-        const keepGenerating = callbackOnIteration(chunkValue);
-
-        if (!keepGenerating) {
-            done = true;
-            controller.abort();
-        }
-    }
-
-    callbackOnFinish();
-
-    return response;
+export async function createThread() {
+    return postRequest('thread/create')
 }

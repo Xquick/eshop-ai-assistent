@@ -1,2 +1,51 @@
 @import '_tokens.scss';
 
+// Custom.scss
+$secondary: #eaeaea;
+$card-border-radius: 10px;
+$input-border-color: #4a72e921;
+$sidebar-bg: #1e1e1e;
+//$sidebar-bg: #fff;
+$font-family-sans-serif: "Soehne", system-ui, -apple-system, Helvetica Neue, Arial, sans-serif;;
+$header-border: none;
+$nav-tabs-border-width: 0;
+$nav-tabs-border-width: 0;
+$is-mobile: false;
+$warning: #FFDF99;
+
+//$sidebar-nav-link-color: #000;
+@import "../node_modules/@coreui/coreui/scss/coreui";
+
+:root {
+  --cui-primary: var(--color-primary) !important;
+  --cui-input-border-color: rgba(74, 114, 233, 0.1294117647);
+
+  .color-primary {
+    color: var(--cui-primary)
+  }
+}
+
+:root .btn {
+  --cui-btn-padding-x: 1.75rem !important;
+  --cui-btn-padding-y: 0.575rem !important;
+}
+
+::placeholder {
+  font-size: 14px;
+  line-height: 1.5rem;
+}
+
+::-webkit-scrollbar-track {
+  box-shadow: none;
+  background: transparent;
+  border: none;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  background: none;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #dfe4f4;
+  border-radius: 5px;
+}

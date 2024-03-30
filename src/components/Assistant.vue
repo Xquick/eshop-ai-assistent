@@ -1,57 +1,78 @@
 <script setup lang="ts">
-import AssistantMessage from "@/components/AssistantMessage.vue";
-import {useGenerateContent} from "@/composables/useGenerateContent";
-import {onMounted, ref} from "vue";
-import {storeToRefs} from "pinia";
-import {useChatStore} from "@/store/chat.ts";
+import {onMounted, provide, ref} from "vue";
+import Chat from "@/components/Chat/Chat.vue";
+import {createMessage, createThread, listMessages} from "@/services/http.service.ts";
+import {useGtag} from "vue-gtag-next";
 
-const {generateContentByType} = useGenerateContent();
-const chatStore = useChatStore();
-
-const {getMessagesByChatId} = chatStore;
-const {messagesByChatId} = storeToRefs(chatStore);
 const input = ref<HTMLInputElement>();
-const chatId = 1;
-const onSubmit = async () => {
-  await generateContentByType(chatId, {
-    promptText: input.value.value,
+
+const threadId = ref();
+// () => 'thread_MlW4lwiGwCWZXgZZKNz5siEl'
+
+const messages = ref([]);
+const {event} = useGtag();
+
+const onPromptSent = async (message: string) => {
+  messages.value.push({
+    content: message,
+    role: 'user'
+  });
+
+  messages.value.push({
+    content: '',
+    role: 'assistant'
+  });
+
+  await createMessage(threadId.value, message, (textChunk) => {
+    messages.value[messages.value.length - 1].content += textChunk;
+  });
+
+  event('generate_text', {
+    'event_category': 'generate',
+    'event_label': 'text'
   })
 }
 
-onMounted(() => {
-  getMessagesByChatId(`1`);
-  console.log('messagesByChatId', messagesByChatId);
+onMounted(async () => {
+  let localThreadId = localStorage.getItem('blueai_thread_id');
+
+  if (!localThreadId) {
+    const response = await createThread();
+    const responseData = await response.json();
+    localThreadId = responseData.thread_id;
+
+    localStorage.setItem('blueai_thread_id', localThreadId);
+  }
+
+  threadId.value = localThreadId;
+
+  const response = await listMessages(threadId.value);
+  const messagesResponse = await response.json();
+
+  messages.value = messagesResponse.data.map((messageItem) => {
+    return {
+      content: messageItem.content[0].text.value,
+      role: messageItem.role
+    }
+  });
 })
+
+provide('threadId', threadId);
 
 </script>
 
 <template>
   <div class="assistant">
     <div class="assistant__close" @click="$emit('close')">x</div>
-    <div>
-      <AssistantMessage v-for="message in messagesByChatId[1]" :message="message.content"/>
-    </div>
-
-    <div class="assistant__input w-full">
-      <form @submit.prevent="onSubmit">
-        <input ref="input" class="w-full"/>
-        <button type="submit" class="assistant__submit">
-          <img src="../assets/arrow.png" alt=""/>
-        </button>
-      </form>
-    </div>
+    <Chat :messages="messages" @prompt-sent="onPromptSent"/>
   </div>
 </template>
 
 <style scoped lang="scss">
 .assistant {
-  display: flex;
   position: relative;
-  flex-direction: column;
-  min-height: 300px;
-  min-width: 500px;
-  padding: 20px 30px;
   background: white;
+  overflow: hidden;
   transition: all 0.15s;
   border: 3px solid var(--color-primary);
   border-radius: 30px;
@@ -62,20 +83,6 @@ onMounted(() => {
     top: 20px;
     right: 20px;
     cursor: pointer;
-  }
-
-  &__submit {
-    position: absolute;
-    top: 5px;
-    right: 6px;
-    height: calc(100% - 10px);
-    background: var(--color-primary);
-    padding: 10px;
-    border-radius: 10px;
-
-    img {
-      height: 15px;
-    }
   }
 
   &__input {

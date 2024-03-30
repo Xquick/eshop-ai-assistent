@@ -7,7 +7,7 @@ export const supabase = createClient<Database>(
     SUPABASE_ANON_KEY
 );
 
-export async function getMessagesByChatIdFromDB(chatId: string) {
+export async function getmessagesByThreadIdFromDB(chatId: string) {
     return supabase.from('chat_prompt')
         .select('text,created_at,chat_response:response_id(id,created_at,status,text,suggestions,feedback_ok)')
         .eq('chat_id', chatId)
