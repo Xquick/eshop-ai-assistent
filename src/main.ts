@@ -1,4 +1,4 @@
-import { createApp } from 'vue'
+import {createApp} from 'vue'
 import App from './App.vue'
 import './style/index.scss'
 import './style/tailwind.css'
@@ -101,4 +101,10 @@ app.component('CTabPane', CTabPane)
 app.component('CFormRange', CFormRange)
 app.component('CAlert', CAlert)
 
-app.mount('#app')
+const appDiv = document.createElement('div');
+
+appDiv.id = 'assistant-blueai';
+
+document.body.appendChild(appDiv);
+
+app.mount('#assistant-blueai')

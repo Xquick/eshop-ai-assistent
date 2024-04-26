@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "export NODE_ENV=local && vite",
-    "supabase": "supabase functions serve --env-file ./.env.local --no-verify-jwt"
+    "dev": "export NODE_ENV=local && vite --mode production",
+    "build": "vite build"
   },
   "dependencies": {
     "@coreui/icons": "^3.0.1",
@@ -24,6 +24,7 @@
   "devDependencies": {
     "@babel/core": "^7.12.16",
     "@babel/eslint-parser": "^7.12.16",
+    "@rollup/plugin-replace": "^5.0.5",
     "@vitejs/plugin-vue": "^5.0.4",
     "autoprefixer": "^10.4.18",
     "eslint": "^8.57.0",

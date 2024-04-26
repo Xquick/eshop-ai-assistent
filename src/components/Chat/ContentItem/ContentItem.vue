@@ -40,6 +40,52 @@ const {id, content, role} = defineProps<{
 </template>
 
 <style lang="scss">
+
+.blueai-products {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 20px;
+  flex-direction: row;
+  gap: 20px;
+
+  &__item {
+    display: flex;
+    overflow: hidden;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.15s;
+    max-width: 30%;
+    flex-direction: column;
+    background: white;
+
+    img {
+      order: 1;
+      width: 100%;
+    }
+
+    &:hover {
+      background: #f9f9f9;
+    }
+  }
+}
+
+.blueai-product {
+  &__name {
+    padding: 10px 10px 0;
+    order: 2;
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 10px;
+  }
+
+  &__price {
+    padding: 10px;
+    order: 3;
+    margin-top: 15px;
+    font-weight: bold;
+  }
+}
+
 .content-item {
   width: 100%;
   border-top: 1px solid #efefef;

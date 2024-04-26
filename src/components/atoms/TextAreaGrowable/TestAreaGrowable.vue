@@ -34,7 +34,7 @@ textarea::-webkit-scrollbar-track {
   border: none;
 }
 textarea::-webkit-scrollbar {
-  width: 8px;
+  width: 2px;
   background: none;
 }
 textarea::-webkit-scrollbar-thumb {
